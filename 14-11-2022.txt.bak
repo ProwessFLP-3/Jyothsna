@@ -1,0 +1,606 @@
+1st question:
+i/p:
+[{
+    "message": "Hello world!",
+    "city":["hyd","hyd1","hyd2"]
+},
+{
+    "message": "Hello world1!",
+    "city":["vig1","vig2","vig3"]
+},
+    {
+ "message": "Hello world2!",
+    "city":["tnl1","tnl2","tnl3"]
+    }
+
+] 
+script:
+%dw 2.0
+output application/json
+---
+payload map ((item, index) -> {"msg":item.message, "cities":item.city map ((item1,index1) ->{"city": item1 ++ item.message})})
+o/p:
+[
+  {
+    "msg": "Hello world!",
+    "cities": [
+      {
+        "city": "hydHello world!"
+      },
+      {
+        "city": "hyd1Hello world!"
+      },
+      {
+        "city": "hyd2Hello world!"
+      }
+    ]
+  },
+  {
+    "msg": "Hello world1!",
+    "cities": [
+      {
+        "city": "vig1Hello world1!"
+      },
+      {
+        "city": "vig2Hello world1!"
+      },
+      {
+        "city": "vig3Hello world1!"
+      }
+    ]
+  },
+  {
+    "msg": "Hello world2!",
+    "cities": [
+      {
+        "city": "tnl1Hello world2!"
+      },
+      {
+        "city": "tnl2Hello world2!"
+      },
+      {
+        "city": "tnl3Hello world2!"
+      }
+    ]
+  }
+]
+2nd question:
+i/p:
+%dw 2.0
+output application/json
+var city = ["hyd","hyd1","hyd2"]
+var city1= ["vig1","vig2","vig3"]
+var city2 =["tnl1","tnl2","tnl3"]
+---
+city ++ city1 + city2
+o/p:
+[
+  "hyd",
+  "hyd1",
+  "hyd2",
+  "vig1",
+  "vig2",
+  "vig3",
+  [
+    "tnl1",
+    "tnl2",
+    "tnl3"
+  ]
+]
+3rd question:
+i/p:
+["a","b","c","d","e","f"]
+Script:
+%dw 2.0
+output application/json
+---
+payload[-1 to 0] joinBy ""
+o/p:
+"fedcba"
+4th question:
+[{
+    "message": "Hello world!",
+    "city":"hyd"
+},
+{
+
+    "message": "Hello world1!",
+    "city":"vig1"
+},
+    {
+ "message": "Hello world2!",
+    "city":"tnl1"
+    }
+
+] 
+script:
+%dw 2.0
+output application/json
+---
+payload.city[-1 to 0] joinBy ""
+o/p:
+"tnl1vig1hyd"
+5th question:
+[{
+    "message": "Hello world!",
+    "city":"hyd",
+    "id":1
+},
+{
+    "message": "Hello world1!",
+    "city":"vig1",
+    "id":2
+},
+    {
+ "message": "Hello world2!",
+    "city":"tnl1",
+    "id":3
+    }
+
+]
+Script:
+%dw 2.0
+output application/json
+---
+sum(payload.id + 5)
+o/p:
+11
+6th question:
+i/p:
+{
+    "message": "Hello world!",
+    "city":["hyd","hyd1","hyd2"],
+    "id":1
+}
+script:
+%dw 2.0
+output application/json
+---
+payload.city + "hyd3"
+o/p:
+[
+  "hyd",
+  "hyd1",
+  "hyd2",
+  "hyd3"
+]
+7th question:
+i/p:
+{
+    "message": "Hello world!",
+    "city":["hyd","hyd1","hyd2"],
+    "id":1
+}
+script:
+%dw 2.0
+output application/json
+---
+payload.city - "hyd1"
+o/p:
+[
+  "hyd",
+  "hyd2"
+]
+8th question:
+i/p:
+{
+    "message": "Hello world!",
+    "city":"hyd",
+    "id":1
+}
+script:
+%dw 2.0
+output application/json
+---
+payload ++ {"add":"tn1"}
+o/p:
+{
+  "message": "Hello world!",
+  "city": "hyd",
+  "id": 1,
+  "add": "tn1"
+}
+9th question:
+{
+    "message": "Hello world!",
+    "city":"hyd",
+    "id":"1",
+    "active":"true"
+
+}
+script:
+%dw 2.0
+output application/json
+---
+{"msg":payload.message,"city":payload.city,
+    "id":payload.id as Number,
+    "active": payload.active as Boolean}
+	
+o/p:
+{
+  "msg": "Hello world!",
+  "city": "hyd",
+  "id": 1,
+  "active": true
+}
+
+10th question:
+i/p:
+[{
+    "message": "Hello world!",
+    "city":"hyd",
+    "id":"1",
+    "active":"true"
+},
+{
+    "message": "Hello world1!",
+    "city":"hyd1",
+    "id":"2",
+    "active":"true"
+}]
+script:
+%dw 2.0
+output application/json
+---
+payload + {
+    "message": "Hello world2",
+    "city": "hyd2",
+    "id": "2",
+    "active": "false"
+  }
+  o/p:
+  [
+  {
+    "message": "Hello world!",
+    "city": "hyd",
+    "id": "1",
+    "active": "true"
+  },
+  {
+    "message": "Hello world1!",
+    "city": "hyd1",
+    "id": "2",
+    "active": "true"
+  },
+  {
+    "message": "Hello world2",
+    "city": "hyd2",
+    "id": "2",
+    "active": "false"
+  }
+]
+11th question:
+{
+    "a":8.6
+}
+script:
+%dw 2.0
+output application/json
+---
+round(payload.a)
+o/p:
+9
+12th question:
+i/p:
+{
+   "a":8.2
+}
+script:
+%dw 2.0
+output application/json
+---
+round(payload.a)
+o/p:
+8
+13th question:
+[ { "a" : 10 }, { "a" : 20.5 }, { "a" : 80 } ]
+script:
+%dw 2.0
+output application/json
+---
+payload[2]
+o/p:
+{
+  "a": 80
+}
+14th question:
+Script:
+%dw 2.0
+output application/json
+var firstInput = [
+  { "bookId":"101",
+    "title":"world history",
+    "price":"19.99"
+  },
+  {
+    "bookId":"202",
+    "title":"the great outdoors",
+    "price":"15.99"
+  },
+  {
+    "bookId":"203",
+    "title":"the great outdoors",
+    "price":"15.99"
+  }
+]
+var secondInput = [
+  {
+    "bookId":"101",
+    "author":"john doe"
+  },
+  {
+    "bookId":"202",
+    "author":"jane doe"
+  }
+]
+---
+firstInput map (item1) ->
+{
+ theId : item1.bookId as Number,
+ theTitle: item1.title,
+ thePrice: item1.price as Number,
+ (secondInput map (item2)->("theAuthor": item2.author)if (item2.bookId == item1.bookId))
+ }
+o/p:
+[
+  {
+    "theId": 101,
+    "theTitle": "world history",
+    "thePrice": 19.99,
+    "theAuthor": "john doe"
+  },
+  {
+    "theId": 202,
+    "theTitle": "the great outdoors",
+    "thePrice": 15.99,
+    "theAuthor": "jane doe"
+  },
+  {
+    "theId": 203,
+    "theTitle": "the great outdoors",
+    "thePrice": 15.99
+  }
+]
+15th question:
+
+i/p:
+[
+ {
+ "message": "Hello world!",
+ "city": "hyd",
+ "id": "1",
+ "active": "true"
+ },
+ {
+ "message": "Hello world1!",
+ "city": "hyd1",
+ "id": "2",
+ "active": "true"
+ },
+ {
+ "message": "Hello world2",
+ "city": "hyd2",
+ "id": "2",
+ "active": "false"
+ }
+]
+script:
+%dw 2.0
+output application/json
+---
+payload[0] mapObject ((value, key, index) -> {(key):index})
+o/p:
+{
+  "message": 0,
+  "city": 1,
+  "id": 2,
+  "active": 3
+}
+---------------------------------------
+16th question:
+[
+ {
+ "message": "Hello world!",
+ "city": "hyd",
+ "id": "1",
+ "active": "true"
+ },
+ {
+ "message": "Hello world1!",
+ "city": "hyd1",
+ "id": "2",
+ "active": "boo"
+ },
+ {
+ "message": "Hello world2",
+ "city": "hyd2",
+ "id": "2",
+ "active": "false"
+ }
+]
+SCRIPT:
+%dw 2.0
+output application/json
+---
+payload map ((item, index) -> if(item.id == "1") item ++ {"add":"tln"} else(item) )
+O/P:
+[
+  {
+    "message": "Hello world!",
+    "city": "hyd",
+    "id": "1",
+    "active": "true",
+    "add": "tln"
+  },
+  {
+    "message": "Hello world1!",
+    "city": "hyd1",
+    "id": "2",
+    "active": "boo"
+  },
+  {
+    "message": "Hello world2",
+    "city": "hyd2",
+    "id": "2",
+    "active": "false"
+  }
+]
+-------------------------------------------------------------------------------------------
+17th question
+i/p:
+[
+ {
+ "message": "Hello world!",
+ "city": "hyd",
+ "id": "1",
+ "active": "true"
+ },
+ {
+ "message": "Hello world1!",
+ "city": "hyd1",
+ "id": "2",
+ "active": "false"
+ },
+ {
+ "message": "Hello world2",
+ "city": "hyd2",
+ "id": "3",
+ "active": "true"
+ },
+ {
+ "message": "Hello world3",
+ "city": "hyd3",
+ "id": "4",
+ "active": "true"
+ }
+]
+script:
+%dw 2.0
+output application/json
+---
+payload filter ($.id != "2" )
+o/p:
+[
+  {
+    "message": "Hello world!",
+    "city": "hyd",
+    "id": "1",
+    "active": "true"
+  },
+  {
+    "message": "Hello world2",
+    "city": "hyd2",
+    "id": "3",
+    "active": "true"
+  },
+  {
+    "message": "Hello world3",
+    "city": "hyd3",
+    "id": "4",
+    "active": "true"
+  }
+]
+----------------------------------------------------------------------------
+18th question:
+i/p:
+[
+ {
+ "message": "Hello world!",
+ "city": "hyd",
+ "id": "1",
+ "active": "true"
+ },
+ {
+ "message": "Hello world1!",
+ "city": "hyd1",
+ "id": "2",
+ "active": "false"
+ },
+ {
+ "message": "Hello world2",
+ "city": "hyd2",
+ "id": "3",
+ "active": "true"
+ },
+ {
+ "message": "Hello world3",
+ "city": "hyd3",
+ "id": "4",
+ "active": "true"
+ }
+]
+script:
+%dw 2.0
+output application/json
+---
+(payload filter ($.id != "2" )).id joinBy ","
+o/p:
+
+"1,3,4"
+--------------------------------------------------------------
+19th question
+
+Input:
+[
+ {
+ "message": "Hello world!",
+ "city": "hyd",
+ "id": "1",
+ "active": "true"
+ },
+ {
+ "message": "Hello world1!",
+ "city": "hyd1",
+ "id": "1",
+ "active": "false"
+ },
+ {
+ "message": "Hello world2",
+ "city": "hyd2",
+ "id": "2",
+ "active": "flag"
+ },
+ {
+ "message": "Hello world3",
+ "city": "hyd3",
+ "id": "3",
+ "active": "flag1"
+ },
+ {
+ "message": "Hello world4",
+ "city": "hyd4",
+ "id": "3",
+ "active": "flag2"
+ },
+ {
+ "message": "Hello world5",
+ "city": "hyd5",
+ "id": "4",
+ "active": "flag3"
+ }
+]
+Output:
+[
+ {
+ "message": "Hello world!",
+ "city": "hyd"
+ },
+ {
+ "message": "Hello world2",
+ "city": "hyd2"
+ },
+ {
+ "message": "Hello world3",
+ "city": "hyd3"
+ },
+ {
+ "message": "Hello world5",
+ "city": "hyd5"
+ }
+]
+DataWeave: 
+%dw 2.0
+output application/json
+---
+(payload distinctBy ($.id)) map ((item, index) -> item - "id" -"active")
+-------------------------------------------------------------------------------
